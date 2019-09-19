@@ -1,5 +1,6 @@
 // import java.io; //File Handling belum butuh
 import java.util;
+import java.io.Reader;
 import java.util.Scanner;
 
 class MATRIKS{
@@ -21,6 +22,11 @@ class MATRIKS{
         this.matrix = A.matrix;
     }
 
+    public MATRIKS(){
+        this.row = 5;
+        this.col = 5;
+    }
+
     void inputmatriks(){
         Scanner in = new scanner (system.in);
         for(int i=1;i<=this.row;i++){
@@ -28,6 +34,13 @@ class MATRIKS{
                     this.matrix[i][j] = in.nextDouble();
             }
         }
+    }
+
+    void inputfromfile(MATRIKS hasil){
+        
+        File inp = new File("MATRIKS.txt");
+        Reader read = null;
+
     }
 
     //Selector
@@ -40,7 +53,7 @@ class MATRIKS{
             for(int j = 1; j<=this.col;j++){
                 system.out.print("%.15f ",getElmt(i,j));
             }
-            system.out.println("");
+            system.out.print("\n");
         }
     }
 
@@ -76,11 +89,7 @@ class MATRIKS{
     }
 
     public boolean bujur(){
-        return this.row == this.col;
-    }
-
-    public void swaprows(int i, int j){
-
+        return (this.row == this.col);
     }
 
     public MATRIKS inverse(){
