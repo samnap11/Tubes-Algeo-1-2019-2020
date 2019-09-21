@@ -1,6 +1,7 @@
 // import java.io; //File Handling belum butuh
 import java.util.*;
 import java.io.*;
+import java.lang.Math;
 
 public class MATRIKS{
 
@@ -8,7 +9,7 @@ public class MATRIKS{
     int row,col;
     double [][] matrix;
     
-    //Konstruktor
+    //METHOD INPUT
     public void inputmatriks() {
 
 		Scanner scan = new Scanner(System.in);
@@ -19,20 +20,6 @@ public class MATRIKS{
 		int col = scan.nextInt(); //input kolom
 
         this.inputmatriks(row,col);
-        
-/*		this.row = row;
-		this.col = col;
-		this.matrix = new double[this.row+1][this.col+1];
-
-		 isi matriks 
-		for(int i=1;i<=this.row;i++){
-			for(int j=1;j<=this.col;j++){
-				System.out.print("Input matrix[" + (i) + "][" + (j) + "] : ");
-				this.matrix[i][j] = scan.nextDouble();
-			}
-        }
-        scan.close(); */
-
     }
 
     public void inputmatriks(int row, int col) {
@@ -97,11 +84,12 @@ public class MATRIKS{
             System.err.println(e.toString());
         }
     }
+    //INI BARU KONSTRUKTORNYA
     public MATRIKS(int rows, int cols){
         this.row = rows;
         this.col = cols;            //MakeEmpty yang tadi sama persis ama ini wkwk
         this.matrix = new double[this.row+1][this.col+1];
-    }                               //Konstruktor namanya samain aja ama classnya, dan bisa 3 gini buat override.
+    }                               //Konstruktor namanya samain aja ama classnya, dan bisa 3 gini buat override. benar sekaleeeee
 
     public MATRIKS(MATRIKS A){
         this.row = A.row;
@@ -223,10 +211,7 @@ public class MATRIKS{
             }
 
         }
-        
-        
-
-        
+    return this;        
     }
     
     public MATRIKS inverse(){
@@ -292,7 +277,7 @@ public class MATRIKS{
 
         for (int i = 1; i <= this.row;i++){
             for (int j = 1; j <= this.col; j++){
-                cof.matrix[i][j] = this.removerc(i,j).determinant();
+                cof.matrix[i][j] = (this.removerc(i,j)).determinant();
             }
         }
         return cof;
@@ -411,36 +396,30 @@ public class MATRIKS{
     }
 
 
-    // //gaussjordan
-    // public solve2(){
 
-    // }
+    public void interpolate(MATRIKS dat, int xi){ //dat adalah matriks 2 row n col, row 1 berisi x dan row 2 berisi f(x)
+        int n = dat.col;
+        MATRIKS spl = new MATRIKS(n,n+1);
+        double result;
 
-    // //Cramer method
-    // public solve3(){
-
-    // }
-
-    // //kofaktor
-    // public solve4(){
-
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        for (int i = 1; i <= spl.row; i++){
+            for(int j=1; j < spl.col; j++){
+                spl.matrix[i][j] = Math.pow((dat.matrix[1][i]),j-1);
+            }
+        }
+        
+        for (int k = 1; k <= spl.row;k++){
+            spl.matrix[k][this.col] = dat.matrix[2][k];
+        }
+        result = 0;
+        MATRIKS res = new MATRIKS(spl.cramerssplsolve());
+        System.out.print("P(X) = ");
+        for (int l =1; l<= res.row; l++){
+            System.out.print(res.matrix[l][1]+"X^"+(l-1)+" "); if (l != res.row) System.out.print("+ ");
+            result += Math.pow(res.matrix[l][1],l-1)*xi;
+        }
+        System.out.println("");
+        System.out.print("Hasil interpolasi titik " + xi + " : "); System.out.println(result);
+        
+    }
 }
