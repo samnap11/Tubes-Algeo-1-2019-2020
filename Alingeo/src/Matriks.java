@@ -18,18 +18,20 @@ public class MATRIKS{
 		System.out.print("Masukkan kolom matriks : ");
 		int col = scan.nextInt(); //input kolom
 
-		this.row = row;
+        this.inputmatriks(row,col);
+        
+/*		this.row = row;
 		this.col = col;
 		this.matrix = new double[this.row+1][this.col+1];
 
-		/* isi matriks */
+		 isi matriks 
 		for(int i=1;i<=this.row;i++){
 			for(int j=1;j<=this.col;j++){
 				System.out.print("Input matrix[" + (i) + "][" + (j) + "] : ");
 				this.matrix[i][j] = scan.nextDouble();
 			}
         }
-        scan.close();
+        scan.close(); */
 
     }
 
