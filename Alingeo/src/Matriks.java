@@ -29,7 +29,7 @@ public class MATRIKS{
 				this.matrix[i][j] = scan.nextDouble();
 			}
         }
-
+        scan.close();
 
     }
 
@@ -48,6 +48,7 @@ public class MATRIKS{
 				this.matrix[i][j] = scan.nextDouble();
 			}
         }
+        scan.close();
     }
 
     public void inputfromfile(MATRIKS hasil){  //
@@ -125,6 +126,22 @@ public class MATRIKS{
             System.out.println("");
         }
     }
+    
+    public MATRIKS kalimatriks(MATRIKS M2){
+        MATRIKS result = new MATRIKS(this.row,M2.col);
+
+        for (int i = 1; i <= result.row; i++){
+            for (int j = 1; j <= result.col; j++){
+                result.matrix[i][j] = 0;
+                for (int k = 1; k <= this.col; k++){
+                    result.matrix[i][j] += this.matrix[i][k] * M2.matrix[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
+
 
     public void swap(int i, int j){
         double[] temp;
@@ -200,7 +217,7 @@ public class MATRIKS{
             }
         }
 
-        if (this.bujur){
+        if (this.bujur()){
             for (int l =1; l <=this.row;l++){    
                 double divider = (1 / this.matrix[l][l]);
                 for (int k = l; k <= this.col;k++){             //dividing
@@ -219,9 +236,9 @@ public class MATRIKS{
             }
             return I;
         }
-        else{
-            return this;
+        else{    
             System.out.println("ilegal dimension, no inverse");
+            return this;
         }
     }
 
@@ -237,12 +254,13 @@ public class MATRIKS{
                         res.matrix[i][j] = this.matrix[l][k];
                         j++;
                         if (j > this.row) {
-                            j % res.row; i++;
+                            j = j % res.row; i++;
                         } 
                     }
                 }
             }
         }
+        return res;
     }
 
     public MATRIKS cofactor(){
@@ -254,35 +272,60 @@ public class MATRIKS{
             }
         }
         return cof;
-    }
+    } 
 
     //segitiga atas
     public MATRIKS uppertri(){
         int col = this.col;
         int row = this.row;
     
+        MATRIKS a = new MATRIKS(this);
         for (int i = 1; i <= row ; i++){
             for (int j = i+1; j <= col ; j++){
-                double scaler = this.matrix[j][i] / this.matrix[i][i];
+                double scaler = a.matrix[j][i] / a.matrix[i][i];
 
-                for (int k = 1; k <= this.row; k++){
-                    this.matrix[j][k] -= scaler * this.matrix[i][k];
+                for (int k = 1; k <= a.row; k++){
+                    a.matrix[j][k] -= scaler * a.matrix[i][k];
                 }
             }
         }
-        return res;
+        return a;
     }
 
     public double determinant(){
-        if (this.bujur){
+        if (this.bujur()){
             MATRIKS a = this.uppertri();
-            int det = 1
-            for (int i = 1; i <= a.row; a++){
+            double det = 1;
+            for (int i = 1; i <= a.row; i++){
                 det *= a.matrix[i][i];
             }
             return det;
         }
         else return 0;
+    }
+
+    public MATRIKS cramerssplsolve(){
+        MATRIKS result = new MATRIKS (this.row,1);
+        double detcol;
+        MATRIKS retu = new MATRIKS (this.row,1);
+        MATRIKS SPL = new MATRIKS (this.row, this.col-1);
+         
+        for (int i =1; i <= this.row; i ++){
+            result.matrix[i][1] = this.matrix[i][this.col]; 
+            for (int j = 1; j < this.col; j++){             //augmented matrix di pisah ke matrix spl dan matrix result
+                SPL.matrix[i][j] = this.matrix[i][j];
+            }
+        }
+        double deter = SPL.determinant();
+        for (int k =1; k <= this.col;k++){
+            MATRIKS ASPL = new MATRIKS(SPL);
+            for(int l = 1;l<=this.row;l++){
+                ASPL.matrix[l][k] = result.matrix[l][1];
+            }
+            detcol = ASPL.determinant();
+            retu.matrix[k][1] = detcol / deter;
+        }
+        return retu;
     }
 
 

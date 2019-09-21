@@ -36,6 +36,6 @@ public class menu {
     public static void main(String[] args){
         menu men = new menu();
 
-        menu.start();
+        men.start();
     }
 }
