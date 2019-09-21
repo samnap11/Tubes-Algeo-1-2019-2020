@@ -225,21 +225,67 @@ public class MATRIKS{
         }
     }
 
-    // MEMBUAT MATRIKS JADI SEGITIGA ATAS
-    // public MATRIKS uppertri(){
-    //     int col = this.col;
-    //     int row = this.row;
-    // for (int i = 1; i<= col;i++){
-    //     int max = i;
-    //         for (int j = i + 1; j <= a.col; j++){
-    //             if (Math.abs(a.Elmt(j,i)) > Math.abs(a.Elmt(max,i))){
-    //                 max = j;
-    //             }
-    //         a.swap(i, max); 
-    //         b.swap(i, max);  
-    //         }
-    // }
-    // }
+    //fungsi penghilangan suatu rowcol untuk kofaktor
+    public MATRIKS removerc(int row, int col){
+        MATRIKS res = new MATRIKS(this.row-1,this.col-1);
+
+        int i = 1, j = 1;
+        for (int l = 1;l<= this.row; l++) {
+            if (l != row){
+                for (int k = 1;k<=this.col;k++){
+                    if(k != col){
+                        res.matrix[i][j] = this.matrix[l][k];
+                        j++;
+                        if (j > this.row) {
+                            j % res.row; i++;
+                        } 
+                    }
+                }
+            }
+        }
+    }
+
+    public MATRIKS cofactor(){
+        MATRIKS cof = new MATRIKS(this.row,this.col);
+
+        for (int i = 1; i <= this.row;i++){
+            for (int j = 1; j <= this.col; j++){
+                cof.matrix[i][j] = this.removerc(i,j).determinant();
+            }
+        }
+        return cof;
+    }
+
+    //segitiga atas
+    public MATRIKS uppertri(){
+        int col = this.col;
+        int row = this.row;
+    
+        for (int i = 1; i <= row ; i++){
+            for (int j = i+1; j <= col ; j++){
+                double scaler = this.matrix[j][i] / this.matrix[i][i];
+
+                for (int k = 1; k <= this.row; k++){
+                    this.matrix[j][k] -= scaler * this.matrix[i][k];
+                }
+            }
+        }
+        return res;
+    }
+
+    public double determinant(){
+        if (this.bujur){
+            MATRIKS a = this.uppertri();
+            int det = 1
+            for (int i = 1; i <= a.row; a++){
+                det *= a.matrix[i][i];
+            }
+            return det;
+        }
+        else return 0;
+    }
+
+
     // //gaussjordan
     // public solve2(){
 
