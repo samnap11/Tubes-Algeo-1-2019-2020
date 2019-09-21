@@ -199,22 +199,44 @@ public class MATRIKS{
     }
 
     //gaussian
-    // public GaussElim(MATRIKS res){
-    //     double divider;
-    //     boolean zeroall;
+    public MATRIKS solveSPLGauss(){
+        boolean zeroall;
 
-    //     //PIVOTING
+        //PIVOTING
+        MATRIKS bantuan = this.uppertri(true);
+        // bikin leading 1 dulu
+        for(int i=1;i<=bantuan.row;i++) {
+            int temp_index=i;
+            while(bantuan.row==0 && temp_index<=bantuan.col-1) {
+                temp_index++;
+            }
+            if(temp_index==bantuan.col) {
+                continue;
+            }
+            if(bantuan.matrix[i][temp_index]==1) {
+                continue;
+            } else {
+                double divider = bantuan.matrix[i][temp_index];
+                for(int k=1;k<=bantuan.col;k++) {
+                    bantuan.matrix[i][k] /= divider;
+                }
+            }
+
+        }
+        
+        
 
         
-    // }
+    }
     
     public MATRIKS inverse(){
         MATRIKS I = new MATRIKS(this.row,this.col);
         for (int i = 1; i <= this.row;i ++){
             for (int j = 1; j<= this.col;j++){
-                I.matrix[i][j] = 0;
                 if (i == j){            //MATRIKS IDENTITAS
                     I.matrix[i][j] = 1;
+                } else {
+                    I.matrix[i][j] = 0;
                 }
             }
         }
@@ -277,17 +299,48 @@ public class MATRIKS{
     } 
 
     //segitiga atas
-    public MATRIKS uppertri(){
-        int col = this.col;
-        int row = this.row;
-    
+    public MATRIKS uppertri(boolean aug){
         MATRIKS a = new MATRIKS(this);
-        for (int i = 1; i <= row ; i++){
-            for (int j = i+1; j <= col ; j++){
-                double scaler = a.matrix[j][i] / a.matrix[i][i];
-
-                for (int k = 1; k <= a.row; k++){
-                    a.matrix[j][k] -= scaler * a.matrix[i][k];
+        if(aug) {
+            for(int i=1;i<this.col-1;i++) {
+                int temp_index=i;
+                while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
+                    temp_index++;
+                }
+                if(temp_index==this.row+1) {
+                    continue;
+                }
+                if(temp_index!=i) {
+                    swap(i,temp_index);
+                }
+                for(int k=i+1;k<=this.row;k++) {
+                    if(this.matrix[k][i]!=0) {
+                        double scalar = this.matrix[k][i]/this.matrix[i][i];
+                        for(int z=i;z<=this.col;z++) {
+                            a.matrix[k][z] = this.matrix[k][z] - (this.matrix[i][z]*scalar);
+                        }
+                    }
+                }
+            }
+        } else {
+            for(int i=1;i<this.col;i++) {
+                int temp_index=i;
+                while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
+                    temp_index++;
+                }
+                if(temp_index==this.row+1) {
+                    continue;
+                }
+                if(temp_index!=i) {
+                    swap(i,temp_index);
+                }
+                for(int k=i+1;k<=this.row;k++) {
+                    if(this.matrix[k][i]!=0) {
+                        double scalar = this.matrix[k][i]/this.matrix[i][i];
+                        for(int z=i;z<=this.col;z++) {
+                            a.matrix[k][z] = this.matrix[k][z] - (this.matrix[i][z]*scalar);
+                        }
+                    }
                 }
             }
         }
@@ -295,15 +348,42 @@ public class MATRIKS{
     }
 
     public double determinant(){
+        double det = 1;
         if (this.bujur()){
-            MATRIKS a = this.uppertri();
-            double det = 1;
-            for (int i = 1; i <= a.row; i++){
-                det *= a.matrix[i][i];
+            for(int i=1;i<this.col;i++) {
+                int temp_index=i;
+                while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
+                    temp_index++;
+                }
+                if(temp_index==this.row+1) {
+                    return 0.0000000;
+                }
+                if(temp_index!=i) {
+                    swap(i,temp_index);
+                    det = det * (-1.000000000);
+                }
+                for(int k=i+1;k<=this.row;k++) {
+                    if(this.matrix[k][i]!=0) {
+                        double scalar = this.matrix[k][i]/this.matrix[i][i];
+                        for(int z=i;z<=this.col;z++) {
+                            this.matrix[k][z] -= (this.matrix[i][z]*scalar);
+                        }
+                    }
+                }
             }
-            return det;
+            for(int l=1;l<=this.row;l++) {
+                det=det*this.matrix[l][l];
+            }
+            if(det==-0.0000000000) {
+                return 0.0000000000;
+            } else {
+                return det;
+            }
         }
-        else return 0;
+        else {
+            System.out.println("Tidak ada determinan");
+            return 0.0000000000000;
+        }
     }
 
     public MATRIKS cramerssplsolve(){
