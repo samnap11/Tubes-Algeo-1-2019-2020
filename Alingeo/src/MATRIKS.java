@@ -214,7 +214,23 @@ public class MATRIKS{
     return this;        
     }
     
-    public MATRIKS inverse(){
+
+    public MATRIKS inversebycofactor(){
+        MATRIKS a = new MATRIKS(this.adjoint());
+        a.kalikons(1/this.determinant());
+        return a;
+    }
+
+    public void kalikons(double x){
+        for (int i = 1; i<= this.row;i++){
+            for (int j = 1; j <= this.col; j++){
+                this.matrix[i][j] *= x;
+            }
+        }
+    }
+
+
+    public MATRIKS inverse(){ //inverse menggunakan gaussjordan 
         MATRIKS I = new MATRIKS(this.row,this.col);
         for (int i = 1; i <= this.row;i ++){
             for (int j = 1; j<= this.col;j++){
@@ -272,16 +288,24 @@ public class MATRIKS{
         return res;
     }
 
-    public MATRIKS cofactor(){
+    public MATRIKS cofactormatrix(){
         MATRIKS cof = new MATRIKS(this.row,this.col);
 
         for (int i = 1; i <= this.row;i++){
             for (int j = 1; j <= this.col; j++){
-                cof.matrix[i][j] = (this.removerc(i,j)).determinant();
+                cof.matrix[i][j] = this.cofactor(i,j);
             }
         }
         return cof;
     } 
+
+    public double cofactor(int row,int col){
+        return Math.pow((-1),(row+col))*(this.removerc(row,col)).determinant();
+    }
+
+    public MATRIKS adjoint(){
+        return (this.cofactormatrix()).transpose();
+    }
 
     //segitiga atas
     public MATRIKS uppertri(boolean aug){
@@ -309,7 +333,7 @@ public class MATRIKS{
             }
         } else {
             for(int i=1;i<this.col;i++) {
-                int temp_index=i;
+                int temp_index=i;   
                 while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
                     temp_index++;
                 }
@@ -419,7 +443,7 @@ public class MATRIKS{
             result += Math.pow(res.matrix[l][1],l-1)*xi;
         }
         System.out.println("");
-        System.out.print("Hasil interpolasi titik " + xi + " : "); System.out.println(result);
+        System.out.print("Hasil interpolasi P(X) pada titik " + xi + " : "); System.out.println(result);
         
     }
 }
