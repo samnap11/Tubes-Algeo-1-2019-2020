@@ -188,14 +188,12 @@ public class MATRIKS{
 
     //gaussian
     public MATRIKS solveSPLGauss(){
-        boolean zeroall;
-
         //PIVOTING
         MATRIKS bantuan = this.uppertri(true);
         // bikin leading 1 dulu
         for(int i=1;i<=bantuan.row;i++) {
             int temp_index=i;
-            while(bantuan.row==0 && temp_index<=bantuan.col-1) {
+            while(bantuan.matrix[i][temp_index]==0 && temp_index<=bantuan.col-1) {
                 temp_index++;
             }
             if(temp_index==bantuan.col) {
@@ -205,13 +203,119 @@ public class MATRIKS{
                 continue;
             } else {
                 double divider = bantuan.matrix[i][temp_index];
-                for(int k=1;k<=bantuan.col;k++) {
+                for(int k=temp_index;k<=bantuan.col;k++) {
                     bantuan.matrix[i][k] /= divider;
                 }
             }
-
         }
-    return this;        
+        // Gauss form is achieved
+        MATRIKS equation = new MATRIKS(bantuan.row,bantuan.col-1);
+        for(int z=1;z<=bantuan.row;z++) {
+            for(int y=1;y<=bantuan.col-1;y++) {
+                equation.matrix[z][y] = bantuan.matrix[z][y];
+            }
+        }
+        MATRIKS b = new MATRIKS(this.row,1);
+        for(int x=1;x<=bantuan.row;x++) {
+            b.matrix[x][1] = bantuan.matrix[x][this.col]; 
+        }
+        MATRIKS hasil = new MATRIKS(this.row,1);
+        if(equation.determinant()==0) {
+            int o=1;
+            while(o<=this.col && bantuan.matrix[this.row][o]==0) {
+                o++;
+            }
+            if(o==this.col-1) {
+                System.out.println("Solusi tidak ada");
+                for(int y=1;y<=this.row;y++) {
+                    hasil.matrix[y][1]=Double.NaN;
+                }
+            }
+        } else {
+            for(int l=this.row;l>=1;l--) {
+                hasil.matrix[l][1] = bantuan.matrix[l][this.col];
+                for(int m=l+1;m<this.col;m++) {
+                    hasil.matrix[l][1] -= bantuan.matrix[l][m]*hasil.matrix[m][1];
+                }
+                hasil.matrix[l][1] /= bantuan.matrix[l][l];
+            }
+        }
+        return hasil;
+    }
+    public MATRIKS solveSPLGJ() {
+        MATRIKS bantuan = this.uppertri(true);
+        // bikin leading 1 dulu
+        for(int i=1;i<=bantuan.row;i++) {
+            int temp_index=i;
+            while(bantuan.matrix[i][temp_index]==0 && temp_index<=bantuan.col-1) {
+                temp_index++;
+            }
+            if(temp_index==bantuan.col) {
+                continue;
+            }
+            if(bantuan.matrix[i][temp_index]==1) {
+                continue;
+            } else {
+                double divider = bantuan.matrix[i][temp_index];
+                for(int k=temp_index;k<=bantuan.col;k++) {
+                    bantuan.matrix[i][k] /= divider;
+                }
+            }
+        }
+        // menghilangkan angka yang ada di kolom leading 1, selain leading 1 itu sendiri
+        for(int j=bantuan.col-1;j>=1;j--) {
+            int index1=1;
+            while(index1<=this.row && bantuan.matrix[index1][j]!=1) {
+                index1++;
+            }
+            if(index1==this.row+1) {
+                continue;
+            } else {
+                int l=1;
+                while(l<=bantuan.row) {
+                    if(bantuan.matrix[l][j]!=0 && l!=index1) {
+                        double multiplier = bantuan.matrix[l][j]/bantuan.matrix[index1][j];
+                        for(int m=1;m<=bantuan.col;m++) {
+                            bantuan.matrix[l][m] -= bantuan.matrix[index1][m]*multiplier;
+                        }
+                    }
+                    l++;
+                }
+            }
+        }
+        // Gauss Jordan form is achieved
+        MATRIKS equation = new MATRIKS(bantuan.row,bantuan.col-1);
+        for(int z=1;z<=bantuan.row;z++) {
+            for(int y=1;y<=bantuan.col-1;y++) {
+                equation.matrix[z][y] = bantuan.matrix[z][y];
+            }
+        }
+        MATRIKS b = new MATRIKS(this.row,1);
+        for(int x=1;x<=bantuan.row;x++) {
+            b.matrix[x][1] = bantuan.matrix[x][this.col]; 
+        }
+        MATRIKS hasil = new MATRIKS(this.row,1);
+        if(equation.determinant()==0) {
+            int o=1;
+            while(o<=this.col && bantuan.matrix[this.row][o]==0) {
+                o++;
+            }
+            if(o==this.col-1) {
+                System.out.println("Solusi tidak ada");
+                for(int y=1;y<=this.row;y++) {
+                    hasil.matrix[y][1]=Double.NaN;
+                }
+            }
+        } else {
+            for(int t=this.row;t>=1;t--) {
+                hasil.matrix[t][1] = bantuan.matrix[t][this.col];
+                for(int r=t+1;r<this.col;r++) {
+                    hasil.matrix[t][1] -= bantuan.matrix[t][r]*hasil.matrix[r][1];
+                }
+                hasil.matrix[t][1] /= bantuan.matrix[t][t];
+            }
+        }
+        return hasil;
     }
     
 
@@ -262,7 +366,7 @@ public class MATRIKS{
             return I;
         }
         else{    
-            System.out.println("ilegal dimension, no inverse");
+            System.out.println("illegal dimension, no inverse");
             return this;
         }
     }
@@ -391,7 +495,8 @@ public class MATRIKS{
         }
         else {
             System.out.println("Tidak ada determinan");
-            return 0.0000000000000;
+            Double a = Double.NaN;
+            return a;
         }
     }
 
