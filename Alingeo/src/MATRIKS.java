@@ -84,6 +84,45 @@ public class MATRIKS{
             System.err.println(e.toString());
         }
     }
+
+    public void inputfromfile(){  //
+        
+        // File inp = new File("MATRIKS.txt");
+        FileReader reade;
+        String data;
+        String temp ="";
+        // int colnow,rownow;
+        // colnow = 1; rownow = 1;
+        try{
+            reade = new FileReader("MATRIKS.txt");
+            data = String.valueOf(reade.read());
+                while (!(Integer.valueOf(data) == -1)){
+                if (data == "\n"){
+                    this.matrix[this.row][this.col] = Double.valueOf(temp);
+                    this.row += 1;
+                    this.col = 1;
+                    temp ="";
+                    data = String.valueOf(reade.read());
+                }
+                else if (data == " "){
+                    this.matrix[this.row][this.col] = Double.valueOf(temp);
+                    this.col += 1;
+                    temp = "";
+                    data = String.valueOf(reade.read());
+                }
+                else{
+                    temp += data;
+                    data = String.valueOf(reade.read());
+                }
+            }
+        }
+        catch (FileNotFoundException e){
+            System.err.println(e.toString());
+        }
+        catch (IOException e){
+            System.err.println(e.toString());
+        }
+    }
     //INI BARU KONSTRUKTORNYA
     public MATRIKS(int rows, int cols){
         this.row = rows;
@@ -318,6 +357,18 @@ public class MATRIKS{
         return hasil;
     }
     
+    public MATRIKS augment(MATRIKS hasil){
+        MATRIKS a = new MATRIKS(this.row,this.col+1);
+        for (int j = 1; j<= this.row; j ++){
+            for (int k = 1; k < this.col; k++){
+                a.matrix[j][k] = this.matrix[j][k];
+            } 
+        }
+        for (int i = 1; i <= this.row;i++){
+            a.matrix[i][a.col] = hasil.matrix[i][1];
+        }
+        return a;   
+    }
 
     public MATRIKS inversebycofactor(){
         MATRIKS a = new MATRIKS(this.adjoint());
@@ -333,6 +384,18 @@ public class MATRIKS{
         }
     }
 
+    public void savetofile(){
+        Writer w = new FileWriter("save.txt");
+        String matrice;
+        for (int i =1;i <= this.row;i++){
+            for (int j=1;j<= this.col;j++){
+                matrice += Double.toString(this.matrix[i][j]);
+                if (j == this.col) matrice += "\n";
+                else matrice += " ";
+            }
+        }
+        w.write(matrice);   
+    }
 
     public MATRIKS inverse(){ //inverse menggunakan gaussjordan 
         MATRIKS I = new MATRIKS(this.row,this.col);
