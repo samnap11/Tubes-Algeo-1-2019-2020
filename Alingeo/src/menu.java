@@ -45,6 +45,7 @@ public class menu {
                                 (this.M2.cramerssplsolve()).savetofile();
                         }
                         }
+                break display;
                 case 2:
                 this.inputmenu(false);
                 System.out.println("1. Gauss");
@@ -53,6 +54,7 @@ public class menu {
                         case 1:
                         System.out.println(this.M2.determinant());
                         }
+                        break display;
                 case 3:
                 this.inputmenu(false);
                 System.out.println("1. GaussJordan(Identitas), 2. Kofaktor");
@@ -77,6 +79,7 @@ public class menu {
                         }
                         
                     }
+                    break display;
                 case 4:
                 this.inputmenu(false);
                 System.out.println("1. output di layar, 2. output di file");
@@ -86,7 +89,7 @@ public class menu {
                     (this.M2.cofactormatrix()).printmatriks();
                     case 2:
                     (this.M2.cofactormatrix()).savetofile();
-                }
+                }break display;
                 case 5:
                 this.inputmenu(false);
                 System.out.println("1. output di layar, 2. output di file");
@@ -96,7 +99,7 @@ public class menu {
                     (this.M2.adjoint()).printmatriks();
                     case 2:
                     (this.M2.adjoint()).savetofile();
-                }
+                }break display;
                 
                 case 6:
                 System.out.println("Masukkan dari? 1. keyboard, (1+1). file");
@@ -109,8 +112,10 @@ public class menu {
                 System.out.println("Masukkan titik xi untuk diinterpolasikan P(xi)nya : ");
                 int xi = in.nextInt();
                 this.M2.interpolate(di,xi);
+                break display;
                 case 7:
                     break display;
+                
             }
         }
         in.close();
