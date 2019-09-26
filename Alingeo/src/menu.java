@@ -142,7 +142,7 @@ public class menu {
                 
             }
         }
-        System.out.print("FINISH");
+        System.out.println("FINISH");
     }
 
     public void inputmenu(boolean aug,MATRIKS M){

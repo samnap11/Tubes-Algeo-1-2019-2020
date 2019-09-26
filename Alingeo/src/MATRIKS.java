@@ -159,7 +159,7 @@ public class MATRIKS{
             for(int j = 1; j<=this.col;j++){
                 System.out.print(String.format("%.15f ",this.getElmt(i,j)));
             }
-            // System.out.println(" end of row");
+            System.out.println("");
         }
     }
     
@@ -378,8 +378,9 @@ public class MATRIKS{
     }
 
     public MATRIKS inversebycofactor(){
-        MATRIKS a = new MATRIKS(this.adjoint());
-        a.kalikons(1/this.determinant());
+        MATRIKS a = new MATRIKS(this.row,this.col);
+        a.salin(this.adjoint());
+        a.kalikons(1/(this.determinant()));
         return a;
     }
 
@@ -551,7 +552,7 @@ public class MATRIKS{
         if (this.bujur()){
             for(int i=1;i<this.col;i++) {
                 int temp_index=i;
-                while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
+                while(this.matrix[temp_index][i]==0 && temp_index<this.row) {
                     temp_index++;
                 }
                 if(temp_index==this.row+1) {
@@ -645,7 +646,8 @@ public class MATRIKS{
             spl.matrix[k][spl.col] = dat.matrix[2][k];
         }
         result = 0;
-        MATRIKS res = new MATRIKS(spl.cramerssplsolve());
+        MATRIKS res = new MATRIKS(this.row,1);
+        res.salin(spl.cramerssplsolve());
         System.out.print("P(X) = ");
         for (int l =1; l<= res.row; l++){
             System.out.print(res.matrix[l][1]+"X^"+(l-1)+" "); if (l != res.row) System.out.print("+ ");
