@@ -34,17 +34,31 @@ public class menu {
                         case 1:
                         switch (oc){
                             case 1:
+                                System.out.println("HASIL : ");
                                 (M1.solveSPLGauss()).printmatriks();
+                            
                             case 2:
                                 (M1.solveSPLGauss()).savetofile();
                         }
+                        break display;
+                        case 2:
+                        switch (oc){
+                            case 1:
+                            System.out.println("HASIL : ");
+                            (M1.solveSPLGJ()).printmatriks();
+                            case 2:
+                                (M1.solveSPLGJ()).savetofile();
+                        }   
+                        break display;
                         case 4:
                         switch (oc){
                             case 1:
-                                (M1.cramerssplsolve()).printmatriks();
+                            System.out.println("HASIL : ");
+                            (M1.cramerssplsolve()).printmatriks();
                             case 2:
                                 (M1.cramerssplsolve()).savetofile();
                         }
+                        break display;
                         }
                 break display;
                 case 2:
@@ -67,7 +81,8 @@ public class menu {
                         case 2:
                         switch (oc){
                             case 1:
-                                (M2.inversebycofactor()).printmatriks();
+                            System.out.println("HASIL : ");
+                            (M2.inversebycofactor()).printmatriks();
                             case 2:
                                 (M2.inversebycofactor()).savetofile();
                         }
@@ -75,7 +90,8 @@ public class menu {
                         case 1:
                         switch (oc){
                             case 1:
-                                (M2.inverse()).printmatriks();
+                            System.out.println("HASIL : ");
+                            (M2.inverse()).printmatriks();
                             case 2:
                                 (M2.inverse()).savetofile();
                         }
@@ -88,7 +104,8 @@ public class menu {
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
-                    (M2.cofactormatrix()).printmatriks();
+                    System.out.println("HASIL : ");
+                                (M2.cofactormatrix()).printmatriks();
                     case 2:
                     (M2.cofactormatrix()).savetofile();
                 }break display;
@@ -98,7 +115,8 @@ public class menu {
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
-                    (M2.adjoint()).printmatriks();
+                    System.out.println("HASIL : ");
+                                (M2.adjoint()).printmatriks();
                     case 2:
                     (M2.adjoint()).savetofile();
                 }break display;
@@ -124,6 +142,7 @@ public class menu {
                 
             }
         }
+        System.out.print("FINISH");
     }
 
     public void inputmenu(boolean aug,MATRIKS M){

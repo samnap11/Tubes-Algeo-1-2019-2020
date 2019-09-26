@@ -30,10 +30,11 @@ public class MATRIKS{
 		this.row = row;
 		this.col = col;
 
-		/* isi matriks */
+        /* isi matriks */
+        System.out.println("Masukkan matriks "+row +" x " + col );
 		for(int i=1;i<=this.row;i++){
 			for(int j=1;j<=this.col;j++){
-				System.out.print("Input matrix[" + (i) + "][" + (j) + "] : ");
+				// System.out.print("Input matrix[" + (i) + "][" + (j) + "] : ");
 				this.matrix[i][j] = scan.nextDouble();
 			}
         }
@@ -132,7 +133,11 @@ public class MATRIKS{
     public MATRIKS(MATRIKS A){
         this.row = A.row;
         this.col = A.col;
-        this.matrix = A.matrix;
+        for (int i =1; i <= this.row;i++){
+            for (int j =1; j<= this.col;j++){
+                this.matrix[i][j] = A.matrix[i][j];
+            }
+        }
     }
     public MATRIKS(){
         this.row = 100;
@@ -149,11 +154,12 @@ public class MATRIKS{
 
     //METHODDDDDDDDDDDDDDDDDDDD
     public void printmatriks(){
+        // System.out.println(this.row +" "+ this.col);
         for(int i = 1; i <=this.row;i++){
             for(int j = 1; j<=this.col;j++){
-                System.out.print(String.format("%.15f ",getElmt(i,j)));
+                System.out.print(String.format("%.15f ",this.getElmt(i,j)));
             }
-            System.out.println("");
+            // System.out.println(" end of row");
         }
     }
     
@@ -387,8 +393,9 @@ public class MATRIKS{
 
     public void savetofile(){
         try{
-            Writer w = new FileWriter("save.txt");
-            
+            File file = new File ("save.txt");
+            FileWriter w = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(w);
             
         
         String matrice ="";
@@ -400,7 +407,9 @@ public class MATRIKS{
             }
         }
         
-        w.write(matrice);   
+        bw.write(matrice);   
+        bw.close();
+        w.close();
     }catch (IOException e){
         System.err.println(e.toString());
     }
@@ -486,7 +495,8 @@ public class MATRIKS{
 
     //segitiga atas
     public MATRIKS uppertri(boolean aug){
-        MATRIKS a = new MATRIKS(this);
+        MATRIKS a = new MATRIKS(this.row,this.col);
+        a.salin(this);
         if(aug) {
             for(int i=1;i<this.col-1;i++) {
                 int temp_index=i;
@@ -576,22 +586,39 @@ public class MATRIKS{
         }
     }
 
+    public void salin (MATRIKS A){
+        this.row = A.row;
+        this.col = A.col;
+        for (int i =1; i <= this.row;i++){
+            for (int j =1; j<= this.col;j++){
+                this.matrix[i][j] = A.matrix[i][j];
+            }
+        }
+    }
+
     public MATRIKS cramerssplsolve(){
-        MATRIKS result = new MATRIKS (this.row,2);
+        MATRIKS result = new MATRIKS (this.row,1);
         double detcol;
-        MATRIKS retu = new MATRIKS (this.row,2);
+        MATRIKS retu = new MATRIKS (this.row,1);
         MATRIKS SPL = new MATRIKS (this.row, this.col-1);
-         
+        MATRIKS DETSPL = new MATRIKS(this.row,this.col-1);
         for (int i =1; i <= this.row; i ++){
             result.matrix[i][1] = this.matrix[i][this.col]; 
             for (int j = 1; j < this.col; j++){             //augmented matrix di pisah ke matrix spl dan matrix result
                 SPL.matrix[i][j] = this.matrix[i][j];
             }
         }
-        double deter = SPL.determinant();
-        MATRIKS ASPL = new MATRIKS(SPL);
+        // SPL.printmatriks();
+        // result.printmatriks();
+        
+        MATRIKS ASPL = new MATRIKS(SPL.row,SPL.col);
+        ASPL.salin(SPL);
+        // ASPL.printmatriks();
+        DETSPL.salin(SPL);
+        double deter = DETSPL.determinant();
         for (int k =1; k <= ASPL.col;k++){
-            ASPL = new MATRIKS(SPL);
+            ASPL.salin(SPL);
+            // ASPL.printmatriks();
             for(int l = 1;l<=ASPL.row;l++){
                 ASPL.matrix[l][k] = result.matrix[l][1];
             }
