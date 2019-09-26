@@ -37,7 +37,6 @@ public class MATRIKS{
 				this.matrix[i][j] = scan.nextDouble();
 			}
         }
-        scan.close();
     }
 
     public void inputfromfile(MATRIKS hasil){  //
@@ -139,6 +138,7 @@ public class MATRIKS{
         this.row = 1;
         this.col = 1;
     }
+
 
     //Selector
     public double getElmt(int row, int col){
@@ -385,8 +385,12 @@ public class MATRIKS{
     }
 
     public void savetofile(){
-        Writer w = new FileWriter("save.txt");
-        String matrice;
+        try{
+            Writer w = new FileWriter("save.txt");
+            
+            
+        
+        String matrice ="";
         for (int i =1;i <= this.row;i++){
             for (int j=1;j<= this.col;j++){
                 matrice += Double.toString(this.matrix[i][j]);
@@ -394,8 +398,12 @@ public class MATRIKS{
                 else matrice += " ";
             }
         }
+        
         w.write(matrice);   
+    }catch (IOException e){
+        System.err.println(e.toString());
     }
+}
 
     public MATRIKS inverse(){ //inverse menggunakan gaussjordan 
         MATRIKS I = new MATRIKS(this.row,this.col);
@@ -445,8 +453,9 @@ public class MATRIKS{
                     if(k != col){
                         res.matrix[i][j] = this.matrix[l][k];
                         j++;
-                        if (j > this.row) {
-                            j = j % res.row; i++;
+                        if (j > this.row-1) {
+                            j = 1; 
+                            i++;
                         } 
                     }
                 }
@@ -467,7 +476,7 @@ public class MATRIKS{
     } 
 
     public double cofactor(int row,int col){
-        return Math.pow((-1),(row+col))*(this.removerc(row,col)).determinant();
+        return (Math.pow((-1),(row+col)))*((this.removerc(row,col)).determinant());
     }
 
     public MATRIKS adjoint(){

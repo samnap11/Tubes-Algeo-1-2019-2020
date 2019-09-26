@@ -118,7 +118,6 @@ public class menu {
                 
             }
         }
-        in.close();
     }
 
     public void inputmenu(boolean aug){
