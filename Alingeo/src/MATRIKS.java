@@ -86,42 +86,76 @@ public class MATRIKS{
     }
 
     public void inputfromfile(){  //
-        
-        // File inp = new File("MATRIKS.txt");
-        FileReader reade;
-        String data;
-        String temp ="";
-        // int colnow,rownow;
-        // colnow = 1; rownow = 1;
         try{
-            reade = new FileReader("MATRIKS.txt");
-            data = String.valueOf(reade.read());
-                while (!(Integer.valueOf(data) == -1)){
-                if (data == "\n"){
-                    this.matrix[this.row][this.col] = Double.valueOf(temp);
-                    this.row += 1;
-                    this.col = 1;
-                    temp ="";
-                    data = String.valueOf(reade.read());
-                }
-                else if (data == " "){
-                    this.matrix[this.row][this.col] = Double.valueOf(temp);
-                    this.col += 1;
-                    temp = "";
-                    data = String.valueOf(reade.read());
+        File file = new File("MATRIKS.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line = br.readLine();
+        this.col = 0;
+        this.row = 0;
+        int numline =0;
+        String[] separate = line.split(" ",100);
+        while (line  != null){
+            this.row += 1;
+            for (int i = 0; i < separate.length; i ++){
+                separate[i] = "not";    
+            }
+            numline = 0;
+            separate = line.split(" ",100);
+            for (int i = 0; i < separate.length; i ++){
+                if (separate[i] == "not") {
+                    break;
                 }
                 else{
-                    temp += data;
-                    data = String.valueOf(reade.read());
+                    numline += 1;
                 }
             }
-        }
-        catch (FileNotFoundException e){
+            for (int i=0;i < numline;i++){
+                this.matrix[this.row][i+1] = Double.valueOf(separate[i]);
+            }
+            this.col = numline;
+            line = br.readLine();
+        }}
+        catch(IOException e){
             System.err.println(e.toString());
         }
-        catch (IOException e){
-            System.err.println(e.toString());
-        }
+        
+
+        // // File inp = new File("MATRIKS.txt");
+        // FileReader reade;
+        // String data;
+        // String temp ="";
+        // // int colnow,rownow;
+        // // colnow = 1; rownow = 1;
+        // try{
+        //     reade = new FileReader("MATRIKS.txt");
+        //     data = String.valueOf(reade.read());
+        //         while (!(Integer.valueOf(data) == -1)){
+        //         if (data == "\n"){
+        //             this.matrix[this.row][this.col] = Double.valueOf(temp);
+        //             this.row += 1;
+        //             this.col = 1;
+        //             temp ="";
+        //             data = String.valueOf(reade.read());
+        //         }
+        //         else if (data == " "){
+        //             this.matrix[this.row][this.col] = Double.valueOf(temp);
+        //             this.col += 1;
+        //             temp = "";
+        //             data = String.valueOf(reade.read());
+        //         }
+        //         else{
+        //             temp += data;
+        //             data = String.valueOf(reade.read());
+        //         }
+        //     }
+        // }
+        // catch (FileNotFoundException e){
+        //     System.err.println(e.toString());
+        // }
+        // catch (IOException e){
+        //     System.err.println(e.toString());
+        // }
+        this.printmatriks();
     }
     //INI BARU KONSTRUKTORNYA
     public MATRIKS(int rows, int cols){
@@ -235,7 +269,8 @@ public class MATRIKS{
     //gaussian
     public MATRIKS solveSPLGauss(){
         //PIVOTING
-        MATRIKS bantuan = this.uppertri(true);
+        MATRIKS bantuan = new MATRIKS(this.row,this.col);
+        bantuan.salin(this.uppertri(true));
         // bikin leading 1 dulu
         for(int i=1;i<=bantuan.row;i++) {
             int temp_index=i;
@@ -501,7 +536,7 @@ public class MATRIKS{
         if(aug) {
             for(int i=1;i<this.col-1;i++) {
                 int temp_index=i;
-                while(this.matrix[temp_index][i]==0 && temp_index<=this.row) {
+                while(this.matrix[temp_index][i]==0 && temp_index<this.row) {
                     temp_index++;
                 }
                 if(temp_index==this.row+1) {
