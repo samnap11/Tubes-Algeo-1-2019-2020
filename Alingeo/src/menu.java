@@ -21,14 +21,34 @@ public class menu {
         Scanner in = new Scanner (System.in);
         int solveselect;
         display : while(true){
-            System.out.println("1. SPL, 2. Determinan, 3. Inverse, 4. Kofaktor, 5. Adjoin, 6. Interpolasi, 7. OUT");
+            System.out.println("___________________");
+            System.out.println("|   WELCOME !!!!  |");
+            System.out.println("|   MAIN MENU :   |");
+            System.out.println("===================");
+            System.out.println("|   1.SPL         |");
+            System.out.println("|   2.Determinan  |");
+            System.out.println("|   3.Inverse     |");
+            System.out.println("|   4.Kofaktor    |");
+            System.out.println("|   5.Adjoin      |");
+            System.out.println("|   6.Interpolasi |");
+            System.out.println("|   7.OUT         |");
+            System.out.println("===================");
+            
+
             cs = in.nextInt();
             switch (cs){
                 case 1:
                 this.inputmenu(true,M1);
-                System.out.println("1. Gauss, 2. Gaussjordan, 3.Inverse, 4. Cramer");
+                System.out.println("***************");
+                System.out.println("Pilih metode :");
+                System.out.println("1. Gauss");
+                System.out.println("2. GaussJordan");
+                System.out.println("3. Inverse");
+                System.out.println("4. Cramer");
+                System.out.println("***************");
                 solveselect = in.nextInt();
-                System.out.println("1. output di layar, 2. output di file");
+                System.out.println("1. output di layar");
+                System.out.println("2. output di file");
                 oc = in.nextInt();
                     switch (solveselect){
                         case 1:
@@ -46,10 +66,22 @@ public class menu {
                             case 1:
                             System.out.println("HASIL : ");
                             (M1.solveSPLGJ()).printmatriks();
+                            break display;
                             case 2:
                                 (M1.solveSPLGJ()).savetofile();
+                                break display;
                         }   
                         break display;
+                        case 3:
+                        switch(oc){
+                            case 1:
+                            System.out.println("HASIL : ");
+                            (M1.splinverse()).printmatriks();
+                            break display;
+                            case 2:
+                                (M1.splinverse()).savetofile();
+                                break display;
+                        }
                         case 4:
                         switch (oc){
                             case 1:
@@ -62,20 +94,24 @@ public class menu {
                         }
                 break display;
                 case 2:
-                
                 this.inputmenu(false,M2);
-                System.out.println("1. Gauss");
+                System.out.println("1. Gauss, 2.Cofactor expansion");
                 solveselect = in.nextInt();
                     switch (solveselect){
                         case 1:
                         System.out.println(M2.determinant());
-                        }
                         break display;
+                        case 2:
+                        System.out.println(M2.determinantcofactorexpansion());
+                        break display;
+                    }
                 case 3:
                 this.inputmenu(false,M2);
-                System.out.println("1. GaussJordan(Identitas), 2. Kofaktor");
+                System.out.println("1. GaussJordan(Identitas)");
+                System.out.println("2. Kofaktor");
                 solveselect = in.nextInt();
-                System.out.println("1. output di layar, 2. output di file");
+                System.out.println("1. output di layar");
+                System.out.println("2. output di file");
                 oc = in.nextInt();
                     switch (solveselect){
                         case 2:
@@ -100,7 +136,8 @@ public class menu {
                     break display;
                 case 4:
                 this.inputmenu(false,M2);
-                System.out.println("1. output di layar, 2. output di file");
+                System.out.println("1. output di layar");
+                System.out.println("2. output di file");
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
@@ -111,7 +148,8 @@ public class menu {
                 }break display;
                 case 5:
                 this.inputmenu(false,M2);
-                System.out.println("1. output di layar, 2. output di file");
+                System.out.println("1. output di layar");
+                System.out.println("2. output di file");
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
@@ -146,18 +184,23 @@ public class menu {
     }
 
     public void inputmenu(boolean aug,MATRIKS M){
-        System.out.println("input matriks anda, 1 keyboard, 2 file");
+        System.out.println("********************");
+        System.out.println("input matriks anda :");
+        System.out.println("1.keyboard");
+        System.out.println("2.file");
+        System.out.println("********************");
         Scanner in = new Scanner(System.in);
+        
         if (aug){    
             int ci = in.nextInt();
-            switch (ci){
+           display1 : switch (ci){
                 case 1:
                     System.out.println("Untuk matriks spl :");
                     M.inputmatriks();
-                    // break display;
+                    break display1;
                 case 2:
                     M.inputfromfile();
-                    // break display;
+                    break display1;
                 default:
                     System.out.println("");
                     // break display;
@@ -165,7 +208,7 @@ public class menu {
         }
         else{
             int ci = in.nextInt();
-            switch (ci){
+            display2 :switch (ci){
                 case 1:
                     System.out.println("Untuk matriks :");
                     System.out.print("N : ");
@@ -173,10 +216,10 @@ public class menu {
                     System.out.println();
                     M.inputmatriks(n,n);
                     // this.M2 = this.M1.augment(this.hasil);
-                    // break display;
+                    break display2;
                 case 2:
                     M.inputfromfile();
-                    // break display;
+                    break display2;
                 default:
                     System.out.println("");
                     // break display;

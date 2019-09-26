@@ -39,7 +39,7 @@ public class MATRIKS{
 			}
         }
     }
-
+    
     public void inputfromfile(MATRIKS hasil){  //
         
         // File inp = new File("MATRIKS.txt");
@@ -118,7 +118,7 @@ public class MATRIKS{
         catch(IOException e){
             System.err.println(e.toString());
         }
-        
+    
 
         // // File inp = new File("MATRIKS.txt");
         // FileReader reade;
@@ -238,6 +238,14 @@ public class MATRIKS{
             }
             return true;
         }
+    }
+
+    public double determinantcofactorexpansion(){
+        double det=0;
+        for (int i = 1; i <= this.row; i++){
+            det += (Math.pow(-1,(i+1))*this.cofactor(i,1)*this.matrix[i][1]);
+        }
+        return det;
     }
 
     public void SetElmt(double x,int i,int j){
@@ -462,17 +470,16 @@ public class MATRIKS{
                 }
             }
         }
-
         if (this.bujur()){
             for (int l =1; l <=this.row;l++){    
-                double divider = (1 / this.matrix[l][l]);
-                for (int k = l; k <= this.col;k++){             //dividing
-                    this.matrix[l][k] *= divider;
-                    I.matrix[l][k] *= divider;    
+                double divider = this.matrix[l][l];
+                for (int k = 1; k <= this.col;k++){             //dividing
+                    this.matrix[l][k] /= divider;
+                    I.matrix[l][k] /= divider;    
                 }
                 for (int m = 1; m <= this.row; m++){
-                    if ((m != l) && (this.matrix[l][m] != 0)){
-                        double substractor = this.matrix[l][m];
+                    if ((m != l) && (this.matrix[m][l] != 0)){
+                        double substractor = this.matrix[m][l];
                         for (int n = 1; n <= this.col;n++){
                             this.matrix[m][n] -= substractor * this.matrix[l][n]; 
                             I.matrix[m][n] -= substractor * I.matrix[l][n];
@@ -522,13 +529,32 @@ public class MATRIKS{
     } 
 
     public double cofactor(int row,int col){
-        return (Math.pow((-1),(row+col)))*((this.removerc(row,col)).determinant());
+        return (Math.pow(-1,row+col)*(this.removerc(row,col)).determinant());
     }
 
     public MATRIKS adjoint(){
         return (this.cofactormatrix()).transpose();
     }
 
+    public MATRIKS splinverse(){
+        MATRIKS spl = new MATRIKS(this.row,this.col-1);
+        MATRIKS hasil = new MATRIKS(this.row,1);
+        MATRIKS retu = new MATRIKS(this.row,1);
+        for (int i =1 ; i <= this.row;i++){
+            hasil.matrix[i][1] = this.matrix[i][this.col];
+            for (int j = 1; j < this.col; j++){
+                spl.matrix[i][j] = this.matrix[i][j];
+            }
+        }
+        hasil.printmatriks();
+        spl.printmatriks();
+        MATRIKS invspl = new MATRIKS(this.row,this.col-1);
+        invspl.salin(spl.inversebycofactor());
+        invspl.printmatriks();
+        retu = invspl.kalimatriks(hasil);
+        return retu;
+    }
+    
     //segitiga atas
     public MATRIKS uppertri(boolean aug){
         MATRIKS a = new MATRIKS(this.row,this.col);
