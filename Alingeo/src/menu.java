@@ -146,7 +146,7 @@ public class menu {
     }
 
     public void inputmenu(boolean aug,MATRIKS M){
-        System.out.print("input matriks anda, 1 keyboard, 2 file, 3 random");
+        System.out.println("input matriks anda, 1 keyboard, 2 file");
         Scanner in = new Scanner(System.in);
         if (aug){    
             int ci = in.nextInt();
