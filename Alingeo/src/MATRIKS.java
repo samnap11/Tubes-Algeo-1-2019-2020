@@ -1,4 +1,5 @@
 // import java.io; //File Handling belum butuh
+// package tubes;
 import java.util.*;
 import java.io.*;
 import java.lang.Math;
@@ -28,7 +29,6 @@ public class MATRIKS{
 
 		this.row = row;
 		this.col = col;
-		this.matrix = new double[this.row+1][this.col+1];
 
 		/* isi matriks */
 		for(int i=1;i<=this.row;i++){
@@ -135,14 +135,15 @@ public class MATRIKS{
         this.matrix = A.matrix;
     }
     public MATRIKS(){
-        this.row = 1;
-        this.col = 1;
+        this.row = 100;
+        this.col = 100;
+        this.matrix = new double[this.row+1][this.col+1];
     }
 
 
     //Selector
     public double getElmt(int row, int col){
-        return this.matrix[row+1][col+1];
+        return this.matrix[row][col];
     }
 
 
@@ -532,6 +533,9 @@ public class MATRIKS{
         return a;
     }
 
+
+
+
     public double determinant(){
         double det = 1;
         if (this.bujur()){
@@ -573,9 +577,9 @@ public class MATRIKS{
     }
 
     public MATRIKS cramerssplsolve(){
-        MATRIKS result = new MATRIKS (this.row,1);
+        MATRIKS result = new MATRIKS (this.row,2);
         double detcol;
-        MATRIKS retu = new MATRIKS (this.row,1);
+        MATRIKS retu = new MATRIKS (this.row,2);
         MATRIKS SPL = new MATRIKS (this.row, this.col-1);
          
         for (int i =1; i <= this.row; i ++){
@@ -585,9 +589,10 @@ public class MATRIKS{
             }
         }
         double deter = SPL.determinant();
-        for (int k =1; k <= this.col;k++){
-            MATRIKS ASPL = new MATRIKS(SPL);
-            for(int l = 1;l<=this.row;l++){
+        MATRIKS ASPL = new MATRIKS(SPL);
+        for (int k =1; k <= ASPL.col;k++){
+            ASPL = new MATRIKS(SPL);
+            for(int l = 1;l<=ASPL.row;l++){
                 ASPL.matrix[l][k] = result.matrix[l][1];
             }
             detcol = ASPL.determinant();
@@ -610,7 +615,7 @@ public class MATRIKS{
         }
         
         for (int k = 1; k <= spl.row;k++){
-            spl.matrix[k][this.col] = dat.matrix[2][k];
+            spl.matrix[k][spl.col] = dat.matrix[2][k];
         }
         result = 0;
         MATRIKS res = new MATRIKS(spl.cramerssplsolve());

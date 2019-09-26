@@ -1,3 +1,5 @@
+// package tubes;
+// import tubes.MATRIKS;
 import java.util.Scanner;
 import java.io.*;
 import java.util.*;
@@ -5,9 +7,6 @@ import java.util.*;
 public class menu {
 
     /*atribut*/ 
-    MATRIKS M1 = new MATRIKS();
-    MATRIKS M2;
-    MATRIKS hasil = new MATRIKS();
 
     /* Konstruktor */
     public menu(){
@@ -16,6 +15,8 @@ public class menu {
     /*method*/
 
     public void start(){
+        MATRIKS M1,M2,H,Retu;
+        M1 = new MATRIKS(); M2 = new MATRIKS();
         int cs,oc;
         Scanner in = new Scanner (System.in);
         int solveselect;
@@ -24,7 +25,7 @@ public class menu {
             cs = in.nextInt();
             switch (cs){
                 case 1:
-                this.inputmenu(true);
+                this.inputmenu(true,M1);
                 System.out.println("1. Gauss, 2. Gaussjordan, 3.Inverse, 4. Cramer");
                 solveselect = in.nextInt();
                 System.out.println("1. output di layar, 2. output di file");
@@ -33,30 +34,31 @@ public class menu {
                         case 1:
                         switch (oc){
                             case 1:
-                                (this.M2.solveSPLGauss()).printmatriks();
+                                (M1.solveSPLGauss()).printmatriks();
                             case 2:
-                                (this.M2.solveSPLGauss()).savetofile();
+                                (M1.solveSPLGauss()).savetofile();
                         }
                         case 4:
                         switch (oc){
                             case 1:
-                                (this.M2.cramerssplsolve()).printmatriks();
+                                (M1.cramerssplsolve()).printmatriks();
                             case 2:
-                                (this.M2.cramerssplsolve()).savetofile();
+                                (M1.cramerssplsolve()).savetofile();
                         }
                         }
                 break display;
                 case 2:
-                this.inputmenu(false);
+                
+                this.inputmenu(false,M2);
                 System.out.println("1. Gauss");
                 solveselect = in.nextInt();
                     switch (solveselect){
                         case 1:
-                        System.out.println(this.M2.determinant());
+                        System.out.println(M2.determinant());
                         }
                         break display;
                 case 3:
-                this.inputmenu(false);
+                this.inputmenu(false,M2);
                 System.out.println("1. GaussJordan(Identitas), 2. Kofaktor");
                 solveselect = in.nextInt();
                 System.out.println("1. output di layar, 2. output di file");
@@ -65,44 +67,45 @@ public class menu {
                         case 2:
                         switch (oc){
                             case 1:
-                                (this.M2.inversebycofactor()).printmatriks();
+                                (M2.inversebycofactor()).printmatriks();
                             case 2:
-                                (this.M2.inversebycofactor()).savetofile();
+                                (M2.inversebycofactor()).savetofile();
                         }
                         break display;
                         case 1:
                         switch (oc){
                             case 1:
-                                (this.M2.inverse()).printmatriks();
+                                (M2.inverse()).printmatriks();
                             case 2:
-                                (this.M2.inverse()).savetofile();
+                                (M2.inverse()).savetofile();
                         }
                         
                     }
                     break display;
                 case 4:
-                this.inputmenu(false);
+                this.inputmenu(false,M2);
                 System.out.println("1. output di layar, 2. output di file");
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
-                    (this.M2.cofactormatrix()).printmatriks();
+                    (M2.cofactormatrix()).printmatriks();
                     case 2:
-                    (this.M2.cofactormatrix()).savetofile();
+                    (M2.cofactormatrix()).savetofile();
                 }break display;
                 case 5:
-                this.inputmenu(false);
+                this.inputmenu(false,M2);
                 System.out.println("1. output di layar, 2. output di file");
                 oc = in.nextInt();
                 switch (oc){
                     case 1:
-                    (this.M2.adjoint()).printmatriks();
+                    (M2.adjoint()).printmatriks();
                     case 2:
-                    (this.M2.adjoint()).savetofile();
+                    (M2.adjoint()).savetofile();
                 }break display;
                 
                 case 6:
-                System.out.println("Masukkan dari? 1. keyboard, (1+1). file");
+                // System.out.println("Masukkan dari? 1. keyboard, (1+1). file");
+                System.out.println("jumlah data : ");
                 int n = in.nextInt();
                 MATRIKS di = new MATRIKS(2,n);
                 for (int i = 1; i <= n; i++){
@@ -111,16 +114,19 @@ public class menu {
                 }
                 System.out.println("Masukkan titik xi untuk diinterpolasikan P(xi)nya : ");
                 int xi = in.nextInt();
-                this.M2.interpolate(di,xi);
+                M2.interpolate(di,xi);
                 break display;
                 case 7:
                     break display;
+                case 8:
+                    inputmenu(false,M2);
+                    
                 
             }
         }
     }
 
-    public void inputmenu(boolean aug){
+    public void inputmenu(boolean aug,MATRIKS M){
         System.out.print("input matriks anda, 1 keyboard, 2 file, 3 random");
         Scanner in = new Scanner(System.in);
         if (aug){    
@@ -128,14 +134,10 @@ public class menu {
             switch (ci){
                 case 1:
                     System.out.println("Untuk matriks spl :");
-                    this.M1.inputmatriks();
-                    System.out.println("Matriks hasilnya :");
-                    this.hasil.inputmatriks(M1.row,1);
-                    this.M2 = (this.M1).augment(this.hasil);
+                    M.inputmatriks();
                     // break display;
                 case 2:
-                    this.M1.inputfromfile(this.hasil);
-                    this.M2 = (this.M1).augment(this.hasil);
+                    M.inputfromfile();
                     // break display;
                 default:
                     System.out.println("");
@@ -148,12 +150,13 @@ public class menu {
                 case 1:
                     System.out.println("Untuk matriks :");
                     System.out.print("N : ");
-                    int n = in.nextInt(); System.out.println();
-                    this.M2.inputmatriks(n,n);
+                    int n = in.nextInt();
+                    System.out.println();
+                    M.inputmatriks(n,n);
                     // this.M2 = this.M1.augment(this.hasil);
                     // break display;
                 case 2:
-                    this.M2.inputfromfile();
+                    M.inputfromfile();
                     // break display;
                 default:
                     System.out.println("");
